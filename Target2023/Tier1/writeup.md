@@ -31,10 +31,9 @@ The mail had a clue, stating friend "vigenere" which made me think this cipher w
 
 This is where I decide to try using Vigenere cipher. The key for this isnt provided and an educated guess leads to trying scoprion, shinyscorpion. The latter `shinyscorpion` ends up being this key and leads to the flag.
 
-script used: [a relative link](steg.py)
+script used: [steg.py](steg.py)
 
 **Flag obtained was `StarttheransomwareattackonMonday`**
-
 
 
 ## Challenge 3: A Snowy Disposition
@@ -92,11 +91,65 @@ in this case the parameters guessed were in this order:
 On solving for session key:
 
 ```
-A = g^a mod p = 76 mod 9 = 1
-B = g^b mod p = 78 mod 9 = 4
+A = g^a mod p = 7^6 mod 9 = 1
+B = g^b mod p = 7^8 mod 9 = 4
 
 keya = B^a mod p = 4^6 mod 9 = 1
 keyb = A^b mod p = 1^8 mod 9 = 1
 ```
 
 **Flag obtained was `1`**
+
+
+# Cyber Threat Intelligence (CTI) Challenges
+
+## Challenge 1: WHOIS responsible for this IP address?
+
+This challenge stated the following:
+
+```markdown
+The incident response team has identified an IP address that several infected hosts have been communicating with:
+165.227.251.183
+As part of the investigation, you've been tasked with identifying the company that owns this IP address. 
+Note: The flag is not case/whitespace sensitive.
+```
+
+This was a pretty straight-forward challenge. On running `whois 165.227.251.183` on CLI and checking for OrgName field we get the flag.
+
+**Flag obtained was `Digital Ocean`**
+
+## Challenge 2: Don't sweat the MITRE technique
+
+The challenge stated the following:
+
+```markdown
+The incident response team has identified a suspicious command being executed on several infected hosts:
+nltest /domain_trusts /all_trusts
+To help determine what the adversary is up to, you've been asked to identify the 
+MITRE ATT&CK technique ID associated with this activity.
+
+```
+
+Another straight-forward approach, on searching for what nltest is used for I learned about listing domain controllers and domain trust enumerations. Checking for nltest domain on MITRE's website results in the Enterprise Technique of `Domain Trust Discovery` with a Technique id of `T1482`.
+
+**Flag obtained was `T1482`**
+
+## Challenge 3: ISOlate the domain
+
+This challenge provided an iso image along with the following challenge:
+
+iso img: [ondrivephotos](onedrivephotos.iso.zip)
+
+```markdown
+A fresh SHINY SCORPION campaign is attaching variations of onedrivephotos.iso , but it doesn't seem to do anything in your sandbox.
+If you were able to get the malware running, what C2 domain would it try to contact?
+```
+
+Loading this file on kali and observing file structure reveals various dlls and lnk files. My first approach was to use string command to scrape through any obvious C2 domain server names on the lines of the campaign highlighted by this chillange. 
+On browsing carefully through the dll files, one of the `version.dll` contained the C2 domain which was the flag.
+
+command used to achieve results:` strings version.dll | grep sting`
+
+**Flag obtained was `shiniest.sting.example`**
+
+## Challenge 4: The writers are on Cobalt Strike and this is the best pun I could come up with
