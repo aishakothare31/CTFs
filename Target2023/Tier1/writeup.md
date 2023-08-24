@@ -153,3 +153,25 @@ command used to achieve results:` strings version.dll | grep sting`
 **Flag obtained was `shiniest.sting.example`**
 
 ## Challenge 4: The writers are on Cobalt Strike and this is the best pun I could come up with
+
+As the title suggests, this challenge consisted of using techniques of the Cobalt strike malware. A folder was provided with necessary files to be used for detection of the changed domain. 
+First approach was to try using strings again. but no flag was retrieved since the upgrade campaign was using an encryption for the flag. 
+On searching for sleep masking upgraded for cobalt strike, a few yara rules were found. Additionally, uploading hash to virus total also gave the domain names by checking the DNS resolutions section.
+
+**FLAG obtained was `blue.venom.sting.example`**
+
+## Challenge 5: Can I copy your ransomware? Yeah just don't do it opcode for opcode
+
+This challenge provided a `sting.bin ` folder which consisted of the encrypted flag file, with a `.C_I_0P` extension and hte prompt read as follows: 
+
+```markdown
+The SHINY SCORPION has stung again! Fortunately for us, they were lazy this time and copied another ransomware gang's homework,
+including their mistakes! Can you find a way to decrypt flag.txt and save our data?
+```
+Initally, with no footing to start, the extension definitely looked suspicious and on reseraching a bit about it, I came across an article by SentinelOne labs which did a deep dive on Cl0P ransomware and learned about a version where the master encryption key was accidentally left in the binary. On figuring this out, and running their script with the flag file to to be decrypted, the following flag was able to be retrieved.
+
+A file with list of files to be decrypted had to be created, and the following command was then executed:
+
+`python3 clop.py --elfile sting.bin --keys file_list.txt`
+
+**FLAG obtained as `maintain_offline_backups`**
