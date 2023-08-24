@@ -187,8 +187,10 @@ In this challenge, A code in c langauage was provided, the task was to decrypt t
 
 code provided: [r04c4.c](rc4.c)
 
-examining the file and its name, I had a hunch its some variation of the RC4 algorithm. To start off I decided to look closely at the K and C parameters. I also saw that the function call to d() wasnt having any parameters, although the function had arguments. So I knew the correct order of k,c and p had to be supplied to the function call.
+Examining the file and its name, I had a hunch its some variation of the RC4 algorithm. To start off I decided to look closely at the K and C parameters. I also saw that the function call to d() wasnt having any parameters, although the function had arguments. So I knew the correct order of k,c and p had to be supplied to the function call.
+
 The parameter k was encoded, on using `echo "\162\x30\164\x63\64"` I got `\1620\164c\64`. Further searching gave a php decode site and I landed with value `r0tc4`.
+
 The parameter c had alternate hex and octal values, additionally all functions used octal in the loops.
 On filling the function call for `d` with k,c,p as the parameter order and executing the code, output was received as `MzkuM3fkK2jjqwAspzZ0sD`
 
@@ -199,3 +201,33 @@ Finally I decided to use base64 with ROT13 which gave the flag.
 **Flag obtained was `flag{1_l0v3_rc4}`**
 
 ## Challenge 5: Web2ut3
+
+This challenge provides us with the following html file. 
+
+file: [login.html](login.html)
+
+On viewing this file, as the name suggests, its a login page with a button in russian. First instinct was to use some common login combos, which resulted in :( on console.
+
+On viewing the source code of the page, there are several functions, 2 specifically stand out amongst them. 
+
+```markdown
+function u() {
+        var e = document.getElementById("un").value;
+        "f5b3c8c432e54fdb1f92e6a4977f2d8c118f6cb3990e775978d6de786b2be067" === sha256(e) ? p() : console.log(":(")
+    }
+
+function p() {
+    var e = document.getElementById("pw").value;
+    "28a5056223c6dccaee649380e40ec8c6829772138ab7d64e0739d34b5504f307" === sha256(e) ? d(CryptoJS.MD5(e).toString()) :
+    console.log(":(")
+}
+```
+One is for username and other is for password.
+
+Using the hash value being compared for `un` on the online sha256 database [crackstation](https://crackstation.net/) I got the login name as `скорпион`
+
+Next step was to crack the password using the hash value provided for `pw` , using the same website, password was obtained as `redSCORPION`
+
+On using these credentials to log in to the page, flag was obtained on the console.
+
+**Flag obtained was `flag{y0u_r0ck3d_that_0n3}`**
